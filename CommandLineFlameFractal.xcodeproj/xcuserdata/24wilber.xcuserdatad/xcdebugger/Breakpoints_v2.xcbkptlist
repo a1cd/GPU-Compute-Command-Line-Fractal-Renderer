@@ -78,8 +78,8 @@
             filePath = "CommandLineFlameFractal/main.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "74"
-            endingLineNumber = "74"
+            startingLineNumber = "73"
+            endingLineNumber = "73"
             landmarkName = "unknown"
             landmarkType = "0">
          </BreakpointContent>
@@ -96,7 +96,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "226"
             endingLineNumber = "226"
-            landmarkName = "flameFractal ( texture2d&lt;float&gt; imgA [[texture(0)]], ushort2 tid [[ thread_position_in_threadgroup ]], ushort2 gid [[ threadgroup_position_in_grid ]], ushort2 id [[ thread_position_in_grid ]], constant float* params [[ buffer(1) ]], constant uint* rngStates [[ buffer(2) ]], constant uint2* imageSize [[ buffer(3) ]], constant uint2* threadGroupSize [[ buffer(4) ]] )"
+            landmarkName = "flameFractal ( texture2d&lt;float, access::write&gt; imgA [[texture(0)]], ushort2 tid [[ thread_position_in_threadgroup ]], ushort2 gid [[ threadgroup_position_in_grid ]], ushort2 id [[ thread_position_in_grid ]], constant float* params [[ buffer(1) ]], constant uint* rngStates [[ buffer(2) ]], constant uint2* imageSize [[ buffer(3) ]], constant uint2* threadGroupSize [[ buffer(4) ]] )"
             landmarkType = "9">
             <Actions>
                <BreakpointActionProxy
@@ -119,7 +119,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "228"
             endingLineNumber = "228"
-            landmarkName = "flameFractal ( texture2d&lt;float&gt; imgA [[texture(0)]], ushort2 tid [[ thread_position_in_threadgroup ]], ushort2 gid [[ threadgroup_position_in_grid ]], ushort2 id [[ thread_position_in_grid ]], constant float* params [[ buffer(1) ]], constant uint* rngStates [[ buffer(2) ]], constant uint2* imageSize [[ buffer(3) ]], constant uint2* threadGroupSize [[ buffer(4) ]] )"
+            landmarkName = "flameFractal ( texture2d&lt;float, access::write&gt; imgA [[texture(0)]], ushort2 tid [[ thread_position_in_threadgroup ]], ushort2 gid [[ threadgroup_position_in_grid ]], ushort2 id [[ thread_position_in_grid ]], constant float* params [[ buffer(1) ]], constant uint* rngStates [[ buffer(2) ]], constant uint2* imageSize [[ buffer(3) ]], constant uint2* threadGroupSize [[ buffer(4) ]] )"
             landmarkType = "9">
             <Actions>
                <BreakpointActionProxy
@@ -142,7 +142,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "234"
             endingLineNumber = "234"
-            landmarkName = "flameFractal ( texture2d&lt;float&gt; imgA [[texture(0)]], ushort2 tid [[ thread_position_in_threadgroup ]], ushort2 gid [[ threadgroup_position_in_grid ]], ushort2 id [[ thread_position_in_grid ]], constant float* params [[ buffer(1) ]], constant uint* rngStates [[ buffer(2) ]], constant uint2* imageSize [[ buffer(3) ]], constant uint2* threadGroupSize [[ buffer(4) ]] )"
+            landmarkName = "flameFractal ( texture2d&lt;float, access::write&gt; imgA [[texture(0)]], ushort2 tid [[ thread_position_in_threadgroup ]], ushort2 gid [[ threadgroup_position_in_grid ]], ushort2 id [[ thread_position_in_grid ]], constant float* params [[ buffer(1) ]], constant uint* rngStates [[ buffer(2) ]], constant uint2* imageSize [[ buffer(3) ]], constant uint2* threadGroupSize [[ buffer(4) ]] )"
             landmarkType = "9">
             <Actions>
                <BreakpointActionProxy
@@ -165,7 +165,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "237"
             endingLineNumber = "237"
-            landmarkName = "flameFractal ( texture2d&lt;float&gt; imgA [[texture(0)]], ushort2 tid [[ thread_position_in_threadgroup ]], ushort2 gid [[ threadgroup_position_in_grid ]], ushort2 id [[ thread_position_in_grid ]], constant float* params [[ buffer(1) ]], constant uint* rngStates [[ buffer(2) ]], constant uint2* imageSize [[ buffer(3) ]], constant uint2* threadGroupSize [[ buffer(4) ]] )"
+            landmarkName = "flameFractal ( texture2d&lt;float, access::write&gt; imgA [[texture(0)]], ushort2 tid [[ thread_position_in_threadgroup ]], ushort2 gid [[ threadgroup_position_in_grid ]], ushort2 id [[ thread_position_in_grid ]], constant float* params [[ buffer(1) ]], constant uint* rngStates [[ buffer(2) ]], constant uint2* imageSize [[ buffer(3) ]], constant uint2* threadGroupSize [[ buffer(4) ]] )"
             landmarkType = "9">
             <Actions>
                <BreakpointActionProxy
@@ -282,8 +282,8 @@
             filePath = "CommandLineFlameFractal/main.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "49"
-            endingLineNumber = "49"
+            startingLineNumber = "48"
+            endingLineNumber = "48"
             landmarkName = "unknown"
             landmarkType = "0">
          </BreakpointContent>
@@ -298,8 +298,8 @@
             filePath = "CommandLineFlameFractal/main.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "50"
-            endingLineNumber = "50"
+            startingLineNumber = "49"
+            endingLineNumber = "49"
             landmarkName = "unknown"
             landmarkType = "0">
          </BreakpointContent>

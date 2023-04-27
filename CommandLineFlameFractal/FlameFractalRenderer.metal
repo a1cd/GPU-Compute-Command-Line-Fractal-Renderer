@@ -211,7 +211,7 @@ int ditheredFindMandlebrot(float2 point, float zoom, int n, int max_iterations) 
 
 kernel void flameFractal
 (
-    device      uchar*      output          [[ buffer(0) ]],
+                texture2d<float, access::write> imgA       [[texture(0)]],
                 ushort2     tid             [[ thread_position_in_threadgroup ]],
                 ushort2     gid             [[  threadgroup_position_in_grid  ]],
                 ushort2     id              [[ thread_position_in_grid ]],
@@ -224,10 +224,10 @@ kernel void flameFractal
 //    uint2 position = getPosition((uint2)gid,(uint2) tid, *imageSize, uint2(256, 1));
 //    float2 pos = ((float2) position / (float2) *imageSize) - (1.0/2.0);
     float2 imgSize = float2((*imageSize).x, (*imageSize).y);
-    uint2 position = uint2((uint)((id).x),(uint)((id).y));
+    ushort2 position = ushort2((uint)((id).x),(uint)((id).y));
     int imagemul = 1;
     float2 pos = ((float2(position.x,position.y) / float2(1024*imagemul,1024*imagemul)) - (1.0/2.0));
-    float zoom = 0.00001;
+    float zoom = 0.001;
 //    float zoom = 1.0;
 //        float2 mathpoint = float2((float)((pos.x*zoom)), (float)(pos.y*zoom));
 //    float2 mathpoint = float2((float)((pos.x*zoom)+.5), (float)(pos.y*zoom)+.5);
@@ -246,10 +246,8 @@ kernel void flameFractal
     
 //    float mod = 4.0f;
     //tid.x +
-    output[((position.x + position.y * (*imageSize).x))*4 + 0] = i*16.538256; //max(0.0,(((float)d)+(-257*3)));
-    output[((position.x + position.y * (*imageSize).x))*4 + 1] = i*8;//uchar(sin(i/25.0)*100 + 125); //(d!=1000.0)?sin(pow(d*500000.0,7.0/8.0)*0.5)*64+i*.1:i*0.025;
-    output[((position.x + position.y * (*imageSize).x))*4 + 2] = i^2;//uchar(((i^2)/(256.0*256.0))*255);
-    output[((position.x + position.y * (*imageSize).x))*4 + 3] = uchar(255);
+    vec<float, 4> color = vec<float, 4>(i/256.0,(i/256.0)*1.0,(i/256.0)*(i/256.0),1.0);
+    imgA.write(color, position);
 }
 
 kernel void flameSimilarFractal(

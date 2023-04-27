@@ -45,7 +45,6 @@ let fractalOutputBufferPointer = fractalOutputBuffer?.contents().bindMemory(to: 
 
 // Set up the compute pipeline and encoder
 let pipelineState = try device.makeComputePipelineState(function: kernelFunction)
-pipelineState.makeComputePipelineStateWithAdditionalBinaryFunctions(functions: <#T##[MTLFunction]#>)
 customScope.begin()
 let commandBuffer = commandQueue.makeCommandBuffer()!
 let computeEncoder = commandBuffer.makeComputeCommandEncoder()!
@@ -82,8 +81,20 @@ var threadGroupSizeMTL = maxThreadsPerThreadgroup
 
 computeEncoder.setBytes(&imageSizeMTL, length: MemoryLayout<MTLSize>.stride, index: 3)
 computeEncoder.setBytes(&threadGroupSizeMTL, length: MemoryLayout<MTLSize>.stride, index: 4)
+let textureDescriptor = MTLTextureDescriptor.texture2DDescriptor(pixelFormat: .rgba32Float,
+                                                                 width: Int(imageSize.width),
+                                                                 height: Int(imageSize.height),
+                                                                 mipmapped: false)
+textureDescriptor.usage = [.shaderRead, .shaderWrite]
 
-var texture = device.makeSharedTexture(descriptor: MTLTextureDescriptor())
+let texture = device.makeTexture(descriptor: textureDescriptor)
+let pixelCount = imageSize.width * imageSize.height
+var textureData = [Float](repeating: 0, count: Int(pixelCount) * 4) // 4 channels per pixel
+texture!.replace(region: MTLRegionMake2D(0, 0, Int(imageSize.width), Int(imageSize.height)),
+                mipmapLevel: 0,
+                withBytes: &textureData,
+                bytesPerRow: Int(imageSize.width) * MemoryLayout<Float>.size * 4) // 4 channels per pixel
+
 computeEncoder.setTexture(texture, index: 0)
 // Dispatch the compute kernel
 computeEncoder.dispatchThreadgroups(numThreadgroups, threadsPerThreadgroup: maxThreadsPerThreadgroup)
@@ -94,34 +105,49 @@ commandBuffer.commit()
 customScope.end()
 
 // Convert the fractal data to an image
-let imageByteCount = Int(imageSize.width * imageSize.height) * MemoryLayout<UInt8>.stride * 4
-var imageBytes = [UInt8](repeating: 0, count: Int(imageSize.width * imageSize.height * 4))
-memcpy(&imageBytes, fractalOutputBufferPointer, imageByteCount)
+let imageByteCount = Int(imageSize.width * imageSize.height) * MemoryLayout<Float>.stride * 4
+var imageBytes = [Float](repeating: 0, count: Int(imageSize.width * imageSize.height * 4))
+//memcpy(&imageBytes, fractalOutputBufferPointer, imageByteCount)
 var imageBytesUInt8 = imageBytes//imageBytes.map { UInt8($0 * 255.0) }
 
 let colorSpace = CGColorSpaceCreateDeviceRGB()
 let bitmapInfo = CGBitmapInfo(rawValue: CGImageAlphaInfo.last.rawValue)
 let renderingIntent = CGColorRenderingIntent.defaultIntent//defaultIntent
 
-guard let data = CFDataCreate(kCFAllocatorDefault, imageBytesUInt8, imageByteCount) else {
+
+let textureByteCount = texture!.width * texture!.height * 16 * 4 // 16 bytes per pixel
+let textureOutData = UnsafeMutableRawPointer.allocate(byteCount: textureByteCount, alignment: 1)
+
+texture!.getBytes(textureOutData,
+                  bytesPerRow: texture!.width * 16 * 4,
+                  from: MTLRegionMake2D(0, 0, texture!.width, texture!.height),
+                 mipmapLevel: 0)
+
+guard let data = CFDataCreate(kCFAllocatorDefault, textureOutData, imageByteCount) else {
     fatalError("Failed to create CFData")
 }
 
-let provider = CGDataProvider(data: data)!
-let cgImage = CGImage(
+
+let provider = CGDataProvider(dataInfo: nil,
+                                   data: textureOutData,
+                                   size: textureByteCount,
+                                   releaseData: { _, _, _ in })
+
+var cgImage = CGImage(
     width: Int(imageSize.width),
     height: Int(imageSize.height),
-    bitsPerComponent: 8,
-    bitsPerPixel: 8*4,
-    bytesPerRow: Int(imageSize.width) * MemoryLayout<UInt8>.stride * 4,
+    bitsPerComponent: 16,
+    bitsPerPixel: 64,
+    bytesPerRow: Int(imageSize.width) * MemoryLayout<Float>.stride * 4,
     space: colorSpace,
     bitmapInfo: bitmapInfo,
-    provider: provider,
+    provider: provider!,
     decode: nil,
     shouldInterpolate: true,
     intent: renderingIntent
 )
 
+textureOutData.deallocate()
 
 // Save the image to disk
 var temDir = NSTemporaryDirectory()
